@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard | NeuroAdapt AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">Neuro<span>Adapt</span> AI</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chat.html">AI Tutor</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="test.html">Test Centre</a>
+        <a href="teacher.html" class="active">Teacher View</a>
+    </nav>
+
+    <div style="display:flex; align-items:center; gap:12px;">
+        <span class="learner-pill" style="background: #E6D7C3; color: #493426;">👨‍🏫 Teacher Analytics</span>
+    </div>
+</header>
+
+<main class="dashboard-container">
+
+    <div class="dashboard-heading">
+        <span class="tag">COHORT INTELLIGENCE & INSTRUCTIONAL INSIGHTS</span>
+        <h1>Teacher & Classroom <span>Analytics</span></h1>
+        <p>Real-time visibility into class-wide mastery gaps, frequent student misconceptions, and targeted interventions.</p>
+    </div>
+
+    <!-- COHORT KPI STATS -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <p>Students Tracked</p>
+            <h2 id="teacherTotalStudents">--</h2>
+            <span>Active learner profiles</span>
+        </div>
+
+        <div class="stat-card">
+            <p>Class Average Mastery</p>
+            <h2 id="teacherClassMastery">--%</h2>
+            <span>Across all curriculum concepts</span>
+        </div>
+
+        <div class="stat-card">
+            <p>Total Practice Attempts</p>
+            <h2 id="teacherTotalAttempts">--</h2>
+            <span>Questions completed</span>
+        </div>
+
+        <div class="stat-card">
+            <p>Top Curriculum Gap</p>
+            <h2 id="teacherTopGap" style="font-size: 20px; margin: 25px 0;">--</h2>
+            <span>Needs whole-class focus</span>
+        </div>
+
+    </div>
+
+    <!-- MAIN TEACHER ANALYSIS GRID -->
+    <div class="analysis-grid">
+
+        <!-- CLASS CONCEPT GAPS -->
+        <div class="analysis-card">
+            <h3>📊 Curriculum Concept Mastery (Class Average)</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px;">
+                Aggregated mastery scores across all student attempts in SQLite:
+            </p>
+            <div id="teacherConceptList">
+                <p>Loading class concepts...</p>
+            </div>
+        </div>
+
+        <!-- FREQUENT MISCONCEPTIONS -->
+        <div class="analysis-card">
+            <h3>⚠️ Frequent Misconceptions Across Cohort</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px;">
+                Top detected mental model flaws from student reasoning & distractors:
+            </p>
+            <div id="teacherMisconceptionList">
+                <p>Loading cohort misconceptions...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RECOMMENDED INSTRUCTIONAL INTERVENTIONS -->
+    <div class="analysis-card" style="margin-bottom: 35px;">
+        <h3>💡 AI Instructional Recommendations for Teachers</h3>
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px;">
+            Actionable pedagogical interventions generated from cohort error clusters:
+        </p>
+        <div id="teacherInterventions">
+            <p>Analyzing cohort data...</p>
+        </div>
+    </div>
+
+    <!-- STUDENT ROSTER & INDIVIDUAL PROGRESS TABLE -->
+    <div class="analysis-card" style="margin-bottom: 35px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
+            <h3>👥 Student Roster & Individual Profiles</h3>
+            <span style="font-size: 12px; color: var(--muted);">Click any student to inspect in detail</span>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--border); color: var(--primary);">
+                        <th style="padding: 12px 10px;">Learner ID / Name</th>
+                        <th style="padding: 12px 10px;">Attempts</th>
+                        <th style="padding: 12px 10px;">Accuracy</th>
+                        <th style="padding: 12px 10px;">Average Mastery</th>
+                        <th style="padding: 12px 10px;">Weakest Area</th>
+                        <th style="padding: 12px 10px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="teacherRosterBody">
+                    <tr>
+                        <td colspan="6" style="padding: 20px; text-align: center; color: var(--muted);">
+                            Loading student roster...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px;">
+        <a href="dashboard.html" class="primary-btn">Return to Student Dashboard</a>
+        <a href="test.html" class="secondary-btn">Test Diagnostic Engine</a>
+    </div>
+
+</main>
+
+<footer>
+    <h3>NeuroAdapt AI</h3>
+    <p>Intelligent Learning. Personalized Growth.</p>
+    <p style="font-size: 12px; margin-top: 8px; color: #9a8470;">
+        ⚡ Hackathon MVP Demo: Multi-user authentication is intentionally outside MVP scope in favor of frictionless browser-generated student profiles with persistent SQLite progress.
+    </p>
+    <p>© 2026 NeuroAdapt AI</p>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

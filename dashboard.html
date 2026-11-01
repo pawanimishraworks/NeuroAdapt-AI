@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | NeuroAdapt AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">Neuro<span>Adapt</span> AI</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chat.html">AI Tutor</a>
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="test.html">Test Centre</a>
+        <a href="teacher.html">Teacher View</a>
+    </nav>
+
+    <div style="display:flex; align-items:center; gap:12px;">
+        <span class="learner-pill" id="navLearnerPill" title="Browser-generated learner profile">👤 <span id="navLearnerName">Learner</span></span>
+    </div>
+</header>
+
+<main class="dashboard-container">
+
+    <div class="dashboard-heading">
+        <span class="tag">YOUR LEARNING INTELLIGENCE & MASTERY MODEL</span>
+        <h1>Performance <span>Dashboard</span></h1>
+        <p>Live cognitive mastery tracking, misconception diagnostics, and personalized recommendations.</p>
+    </div>
+
+    <!-- PROFILE SWITCHER BAR (Zero-login hackathon demo feature) -->
+    <div style="background: #FAF3E8; border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div>
+            <span style="font-weight: 700; color: var(--primary);">Active Profile:</span>
+            <span id="activeLearnerDisplay" style="font-weight: 600; color: var(--text); margin-left: 6px;">Student</span>
+            <span style="font-size: 12px; color: var(--muted); margin-left: 8px;">(Persisted in SQLite database)</span>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button type="button" class="secondary-btn" style="padding: 7px 14px; font-size: 12px;" onclick="promptChangeLearnerName()">Rename</button>
+            <button type="button" class="secondary-btn" style="padding: 7px 14px; font-size: 12px;" onclick="createNewLearnerProfile()">+ New Student Profile</button>
+        </div>
+    </div>
+
+    <!-- NEW LEARNER EMPTY STATE BANNER -->
+    <div id="newLearnerBanner" style="display: none; background: #FFF9F2; border: 2px dashed var(--secondary); border-radius: 14px; padding: 24px; margin-bottom: 25px; text-align: center;">
+        <h3 style="color: var(--primary); margin-bottom: 8px;">👋 Welcome to your Adaptive Learning Journey!</h3>
+        <p style="color: var(--muted); font-size: 14px; max-width: 650px; margin: 0 auto 16px;">
+            You have no assessment records yet. Take the <strong>Class 10 Electricity Diagnostic Assessment</strong> to calibrate your personalized knowledge graph and unlock tailored recommendations.
+        </p>
+        <a href="test.html?mode=diagnostic" class="primary-btn">Start Diagnostic Assessment →</a>
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <p>Overall Accuracy</p>
+            <h2 id="overallScore">--%</h2>
+            <span>Based on assessment attempts</span>
+        </div>
+
+        <div class="stat-card">
+            <p>Concepts Tracked</p>
+            <h2 id="topicsCount">0</h2>
+            <span>Active knowledge nodes</span>
+        </div>
+
+        <div class="stat-card">
+            <p>Questions Attempted</p>
+            <h2 id="testsCount">0</h2>
+            <span>Assessment history</span>
+        </div>
+
+        <div class="stat-card">
+            <p>Learner Status</p>
+            <h2 id="learningStatus">New</h2>
+            <span>Cognitive profile stage</span>
+        </div>
+
+    </div>
+
+    <!-- CONCEPT GRAPH & KNOWLEDGE MAP SECTION -->
+    <div class="analysis-card" style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <h3 style="margin-bottom: 4px;">🧠 Knowledge Graph & Prerequisite Concept Map</h3>
+                <p style="font-size: 13px; color: var(--muted);">Directed Acyclic Graph (DAG) mapping prerequisite mastery dependencies</p>
+            </div>
+            <div style="display: flex; gap: 12px; font-size: 11px;">
+                <span style="display: flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#4D7C54;"></span> Mastered (≥75%)</span>
+                <span style="display: flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#C07D38;"></span> Developing (40-74%)</span>
+                <span style="display: flex; align-items: center; gap: 4px;"><span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#B84A39;"></span> Knowledge Gap (<40%)</span>
+            </div>
+        </div>
+
+        <div id="conceptGraphContainer" style="background: #FAF5ED; border: 1px solid var(--border); border-radius: 12px; padding: 20px; overflow-x: auto;">
+            <div id="conceptGraphVisual" style="min-width: 600px; display: flex; flex-direction: column; gap: 18px;">
+                <!-- Concept nodes dynamically rendered with prerequisite links -->
+                <p style="color: var(--muted); text-align: center;">Loading Concept Graph...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEARNING PROGRESS CHART (CHART.JS) -->
+    <div class="analysis-card" id="progressChartCard" style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <h3 style="margin-bottom: 4px;">📈 Learning Progress & Accuracy Timeline</h3>
+                <p style="font-size: 13px; color: var(--muted);">Real-time performance progression across assessment attempts</p>
+            </div>
+            <span id="streakBadge" class="learner-pill" style="font-size: 12px; background: #FFF4E5;">🔥 Streak: 1 Day</span>
+        </div>
+        <div style="height: 220px; position: relative;">
+            <canvas id="progressChart"></canvas>
+        </div>
+    </div>
+
+    <div class="analysis-grid">
+
+        <div class="analysis-card">
+            <h3>Topic-wise Mastery Breakdown</h3>
+            <div id="topicAnalysis">
+                <p>No learning data available yet.</p>
+            </div>
+        </div>
+
+        <div class="analysis-card">
+            <h3>AI Learning Recommendations</h3>
+            <div id="recommendations">
+                <p>Start chatting with your AI tutor to receive personalized recommendations.</p>
+            </div>
+        </div>
+
+        <div class="analysis-card">
+            <h3>Reasoning & Misconception Analysis</h3>
+            <div id="reasoningAnalysis">
+                <p>Your reasoning patterns will appear here as the system collects assessment evidence.</p>
+            </div>
+            <div id="misconceptionList" style="margin-top: 15px;"></div>
+        </div>
+
+        <div class="analysis-card">
+            <h3>Spaced Repetition & Reviews</h3>
+            <div id="spacedRepetitionSection">
+                <p id="weaknessAnalysis">Review intervals adapt based on your recall accuracy.</p>
+                <div id="dueReviewsList" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <a href="chat.html" class="primary-btn">Continue with AI Tutor →</a>
+        <a href="test.html" class="secondary-btn">Take Adaptive Test</a>
+    </div>
+
+</main>
+
+<footer>
+    <h3>NeuroAdapt AI</h3>
+    <p>Intelligent Learning. Personalized Growth.</p>
+    <p style="font-size: 12px; margin-top: 8px; color: #9a8470;">
+        ⚡ Hackathon MVP Demo: Multi-user password authentication is intentionally outside MVP scope in favor of frictionless browser-generated student profiles with persistent SQLite progress.
+    </p>
+    <p>© 2026 NeuroAdapt AI</p>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

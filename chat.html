@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tutor | NeuroAdapt AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">Neuro<span>Adapt</span> AI</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chat.html" class="active">AI Tutor</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="test.html">Test Centre</a>
+        <a href="teacher.html">Teacher View</a>
+    </nav>
+
+    <div style="display:flex; align-items:center; gap:12px;">
+        <span class="learner-pill" id="navLearnerPill" title="Browser-generated learner profile">👤 <span id="navLearnerName">Learner</span></span>
+    </div>
+</header>
+
+<main class="chat-container">
+
+    <div class="chat-heading">
+        <span class="tag">YOUR PERSONAL AI LEARNING COMPANION</span>
+        <h1>What would you like to <span>learn today?</span></h1>
+        <p>Ask questions, explore concepts and prepare smarter for your exams with an adaptive Socratic tutor.</p>
+    </div>
+
+    <div class="chat-box">
+
+        <div class="chat-top">
+            <div>
+                <h3>🧠 NeuroAdapt AI Tutor</h3>
+                <p>● Connected to your cognitive learner profile</p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="ai-label" id="tutorModeBadge">ADAPTIVE SOCRATIC MODE</span>
+            </div>
+        </div>
+
+        <div class="messages" id="messages">
+
+            <div class="message ai-message">
+Hello! Welcome to NeuroAdapt AI.
+
+I'm your personalized Socratic learning assistant. I adapt to your current knowledge gaps and help you build rock-solid conceptual understanding.
+
+Tell me which subject or topic you want to study, or pick one of the suggestions below!
+            </div>
+
+        </div>
+
+        <div class="suggestions" id="tutorSuggestions">
+            <button type="button" onclick="useSuggestion('Explain Ohm’s Law and why it matters')">Explain Ohm's Law</button>
+            <button type="button" onclick="useSuggestion('Why does current stay constant in a series circuit?')">Series vs Parallel</button>
+            <button type="button" onclick="useSuggestion('Give me a numerical question on V = IR')">Practice Numericals</button>
+            <button type="button" onclick="useSuggestion('Ask me a counterfactual question to test my understanding')">Counterfactual Challenge</button>
+        </div>
+
+        <form class="chat-input" onsubmit="sendMessage(event)">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Ask anything about electrical concepts, formulas, or physics..."
+                autocomplete="off"
+                required
+            >
+            <button type="submit" id="chatSendBtn">Send ↑</button>
+        </form>
+
+    </div>
+
+</main>
+
+<footer>
+    <h3>NeuroAdapt AI</h3>
+    <p>Intelligent Learning. Personalized Growth.</p>
+    <p style="font-size: 12px; margin-top: 8px; color: #9a8470;">
+        ⚡ Hackathon MVP Demo: Learner ID progress auto-persisted in SQLite. No login required.
+    </p>
+    <p>© 2026 NeuroAdapt AI</p>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

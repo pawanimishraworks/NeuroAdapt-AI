@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Centre | NeuroAdapt AI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">Neuro<span>Adapt</span> AI</div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="chat.html">AI Tutor</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="test.html" class="active">Test Centre</a>
+        <a href="teacher.html">Teacher View</a>
+    </nav>
+
+    <div style="display:flex; align-items:center; gap:12px;">
+        <span class="learner-pill" id="navLearnerPill" title="Browser-generated learner profile">👤 <span id="navLearnerName">Learner</span></span>
+    </div>
+</header>
+
+<main class="test-container">
+
+    <div class="dashboard-heading">
+        <span class="tag">PERSONALIZED ASSESSMENT & DIAGNOSTICS</span>
+        <h1>AI Test <span>Centre</span></h1>
+        <p>Assess your knowledge, uncover misconceptions, and strengthen retention with adaptive questions.</p>
+    </div>
+
+    <!-- TEST MODE SELECTOR CARDS -->
+    <div class="test-mode-selector" style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center;">
+        <button type="button" class="mode-pill active" onclick="switchTestMode('adaptive')" id="modeBtnAdaptive">🎯 Adaptive Practice</button>
+        <button type="button" class="mode-pill" onclick="switchTestMode('diagnostic')" id="modeBtnDiagnostic">🩺 Diagnostic Assessment</button>
+        <button type="button" class="mode-pill" onclick="switchTestMode('spaced')" id="modeBtnSpaced">🔄 Spaced Review</button>
+        <button type="button" class="mode-pill" onclick="switchTestMode('custom')" id="modeBtnCustom">⚙️ Custom Topic Test</button>
+    </div>
+
+    <!-- TEST CONFIGURATION CARD -->
+    <div class="test-card" id="testConfigCard">
+
+        <div class="feature-icon">📝</div>
+
+        <h2 id="configCardTitle">Adaptive Learning Assessment</h2>
+
+        <p id="configCardDesc">
+            Our engine adapts questions dynamically based on your current concept mastery and prior misconceptions.
+        </p>
+
+        <div id="customControls" style="display: none;">
+            <label for="testTopic">Choose a topic or concept</label>
+            <input
+                type="text"
+                id="testTopic"
+                placeholder="Example: Ohm's Law, Voltage, Current, Resistance, Series, Parallel..."
+                value="Ohm's Law"
+            >
+
+            <label for="difficulty">Difficulty Level</label>
+            <select id="difficulty">
+                <option value="1">Level 1 - Foundational Concepts</option>
+                <option value="2" selected>Level 2 - Applied & Numericals</option>
+                <option value="3">Level 3 - Counterfactual Reasoning</option>
+            </select>
+        </div>
+
+        <label for="questionCount">Number of Questions</label>
+        <select id="questionCount">
+            <option value="3">3 Questions (Quick Sprint)</option>
+            <option value="5" selected>5 Questions (Standard)</option>
+            <option value="8">8 Questions (Comprehensive)</option>
+        </select>
+
+        <button class="primary-btn full-btn" id="startTestBtn" onclick="generateTest()">
+            Start Assessment →
+        </button>
+
+        <div id="testResult" style="margin-top: 15px;"></div>
+
+    </div>
+
+    <!-- ACTIVE QUIZ RUNNER CARD (Dynamically populated) -->
+    <div class="test-card" id="activeQuizCard" style="display: none; max-width: 780px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+            <span class="tag" id="quizConceptBadge">CONCEPT: OHM'S LAW</span>
+            <span style="font-size: 13px; color: var(--muted); font-weight: 600;" id="quizProgressText">Question 1 of 5</span>
+        </div>
+
+        <h3 id="quizQuestionPrompt" style="font-size: 20px; line-height: 1.45; margin-bottom: 22px; color: var(--text);">
+            Question prompt loading...
+        </h3>
+
+        <div id="quizOptionsContainer" class="quiz-options-grid" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px;">
+            <!-- Options dynamically inserted -->
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label for="userReasoning" style="font-size: 12px; font-weight: 600; color: var(--muted); display: block; margin-bottom: 6px;">
+                💡 Explain your reasoning (Optional - helps our AI detect reasoning patterns & misconceptions):
+            </label>
+            <input
+                type="text"
+                id="userReasoning"
+                placeholder="e.g. Current depends inversely on resistance, so doubling R must halve I..."
+                style="padding: 12px; font-size: 13px;"
+            >
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+            <button class="primary-btn" id="submitAnswerBtn" onclick="submitCurrentAnswer()" style="flex: 1;">
+                Submit Answer
+            </button>
+            <button class="secondary-btn" id="nextQuestionBtn" onclick="nextQuestion()" style="display: none; flex: 1;">
+                Next Question →
+            </button>
+        </div>
+
+        <!-- Feedback Area -->
+        <div id="quizFeedbackArea" style="margin-top: 20px; display: none;"></div>
+    </div>
+
+    <!-- QUIZ SUMMARY CARD -->
+    <div class="test-card" id="quizSummaryCard" style="display: none; max-width: 780px; text-align: center;">
+        <div class="feature-icon">🎉</div>
+        <h2>Assessment Complete!</h2>
+        <p>Your responses have been processed by the NeuroAdapt learner model and saved to your SQLite progress profile.</p>
+
+        <div class="stats-grid" style="margin: 25px 0;">
+            <div class="stat-card">
+                <p>Score</p>
+                <h2 id="summaryScore">0/0</h2>
+                <span>Accuracy</span>
+            </div>
+            <div class="stat-card">
+                <p>Mastery Gain</p>
+                <h2 id="summaryMasteryDelta">+0%</h2>
+                <span>Cognitive update</span>
+            </div>
+            <div class="stat-card">
+                <p>Misconceptions</p>
+                <h2 id="summaryMisconceptions">0</h2>
+                <span>Flagged for review</span>
+            </div>
+            <div class="stat-card">
+                <p>Next Step</p>
+                <h2 id="summaryNextStep" style="font-size: 18px; margin: 25px 0;">Review</h2>
+                <span>AI Recommendation</span>
+            </div>
+        </div>
+
+        <div id="summaryDetails" style="text-align: left; margin: 20px 0; background: #FAF5ED; padding: 18px; border-radius: 12px; border: 1px solid var(--border);"></div>
+
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <a href="dashboard.html" class="primary-btn">View Updated Dashboard →</a>
+            <a href="chat.html" class="secondary-btn">Discuss with AI Tutor</a>
+            <button type="button" class="secondary-btn" onclick="resetQuizRunner()">Take Another Test</button>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <h3>NeuroAdapt AI</h3>
+    <p>Intelligent Learning. Personalized Growth.</p>
+    <p style="font-size: 12px; margin-top: 8px; color: #9a8470;">
+        ⚡ Hackathon MVP Demo: Learner ID progress auto-persisted in SQLite. No login required.
+    </p>
+    <p>© 2026 NeuroAdapt AI</p>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
